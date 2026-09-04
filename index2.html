@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>امتحان الرياضيات التفاعلي | درس التناسب | الصف الأول الإعدادي</title>
+    
+    <!-- Google Font: Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- MathJax for rendering LaTeX equations -->
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #4c1d95;
+            --primary-light: #7c3aed;
+            --secondary: #db2777;
+            --accent: #f43f5e;
+            --bg-gradient: linear-gradient(-45deg, #2e1065, #4c1d95, #701a75, #831843);
+            --card-bg: rgba(255, 255, 255, 0.96);
+            --text-main: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 10px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            margin-top: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Header / Teacher Identity */
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 20px;
+        }
+
+        header h1 {
+            color: var(--primary);
+            font-size: 28px;
+            font-weight: 900;
+        }
+
+        header h2 {
+            color: var(--secondary);
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        .contact-badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .phone-badge {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 6px 16px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .phone-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
+        }
+
+        /* Common Screen Styles */
+        .screen {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(219, 39, 119, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            opacity: 0.95;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background: #cbd5e1;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Form Inputs */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #334155;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-light);
+        }
+
+        /* Instructions Screen */
+        .instructions-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .instructions-list li {
+            position: relative;
+            padding-right: 35px;
+            margin-bottom: 15px;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #475569;
+        }
+
+        .instructions-list li i {
+            position: absolute;
+            right: 0;
+            top: 3px;
+            color: var(--secondary);
+            font-size: 20px;
+        }
+
+        /* Quiz Header Meta */
+        .quiz-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8fafc;
+            padding: 12px 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .timer-box {
+            font-weight: 800;
+            font-size: 18px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 12px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .timer-box.warning {
+            color: var(--accent);
+            background: #ffe4e6;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .badge-level {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
+        }
+        .level-easy { background-color: #10b981; }
+        .level-medium { background-color: #f59e0b; }
+        .level-hard { background-color: #ef4444; }
+
+        /* Question Box */
+        .question-card {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        .question-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            padding: 14px 20px;
+            border-radius: 12px;
+            text-align: right;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary-light);
+            background: #f3e8ff;
+        }
+
+        .option-btn.selected {
+            border-color: var(--primary);
+            background: #f3e8ff;
+            color: var(--primary);
+        }
+
+        .completion-input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            text-align: center;
+            outline: none;
+            direction: ltr;
+        }
+
+        .completion-input:focus {
+            border-color: var(--primary-light);
+        }
+
+        /* Result Screen */
+        .score-circle-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary-light) 0deg, #e2e8f0 0deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .score-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .score-number {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .score-percent {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 700;
+        }
+
+        .motivation-msg {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 25px;
+        }
+
+        .report-section {
+            margin-top: 30px;
+        }
+
+        .report-title {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #1e293b;
+            border-right: 4px solid var(--primary);
+            padding-right: 10px;
+        }
+
+        .report-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .report-card.correct { border-right: 5px solid #10b981; }
+        .report-card.incorrect { border-right: 5px solid #ef4444; }
+
+        .report-q-title {
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .report-ans-row {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .text-correct { color: #10b981; font-weight: 700; }
+        .text-incorrect { color: #ef4444; font-weight: 700; }
+
+        .explanation-box {
+            background: #f8fafc;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #475569;
+            margin-top: 8px;
+            border: 1px dashed #cbd5e1;
+        }
+
+        /* Footer Copyright */
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Mr. Sayed Abdelrahman</h1>
+            <h2>Senior Math Teacher</h2>
+            <div class="contact-badges">
+                <a href="tel:01143943465" class="phone-badge"><i class="fa-solid fa-phone"></i> 01143943465</a>
+            </div>
+        </header>
+
+        <!-- SCREEN 1: WELCOME -->
+        <div id="screen-welcome" class="screen active">
+            <h3 style="text-align: center; margin-bottom: 20px; color: var(--primary);">مرحباً بك في اختبار الرياضيات التفاعلي</h3>
+            <p style="text-align: center; color: #64748b; margin-bottom: 25px;">درس: التناسب (الصف الأول الإعدادي)</p>
+            
+            <div class="form-group">
+                <label for="student-name"><i class="fa-solid fa-user"></i> اسم الطالب الثلاثي:</label>
+                <input type="text" id="student-name" placeholder="أدخل اسمك الثلاثي باللغة العربية..." autocomplete="off">
+            </div>
+
+            <button class="btn" onclick="goToInstructions()">
+                الانتقال للتعليمات <i class="fa-solid fa-arrow-left"></i>
+            </button>
+        </div>
+
+        <!-- SCREEN 2: INSTRUCTIONS -->
+        <div id="screen-instructions" class="screen">
+            <h3 style="margin-bottom: 15px; color: var(--primary);">تعليمات وقواعد الاختبار</h3>
+            <ul class="instructions-list">
+                <li><i class="fa-solid fa-stopwatch"></i> مدة الاختبار الإجمالية <strong>40 دقيقة</strong> محتسبة بدقة.</li>
+                <li><i class="fa-solid fa-triangle-exclamation"></i> <strong>تنبيه:</strong> لا يمكنك الرجوع للسؤال السابق بعد الإجابة والانتقال.</li>
+                <li><i class="fa-solid fa-keyboard"></i> في أسئلة "أكمل": اكتب <strong>الأرقام فقط</strong> (أرقام إنجليزية/عادية مثل: 15 أو 8) بدون حروف أو رموز نصية.</li>
+                <li><i class="fa-solid fa-eye-slash"></i> لن تظهر نتيجة كل سؤال فورياً، بل في التقرير النهائي فقط.</li>
+                <li><i class="fa-solid fa-file-invoice-dollar"></i> يظهر تقرير تفصيلي إرشادي في نهاية الاختبار مع الشرح الكامل لكل سؤال.</li>
+            </ul>
+
+            <button class="btn" onclick="startQuiz()">
+                ابدأ الاختبار الآن <i class="fa-solid fa-play"></i>
+            </button>
+        </div>
+
+        <!-- SCREEN 3: QUIZ -->
+        <div id="screen-quiz" class="screen">
+            <div class="quiz-meta">
+                <div>
+                    <span style="font-size: 14px; font-weight: 700; color: #64748b;">السؤال: </span>
+                    <span id="q-progress" style="font-weight: 800; color: var(--primary);">1 / 20</span>
+                </div>
+                <div id="timer" class="timer-box">
+                    <i class="fa-solid fa-clock"></i> <span id="timer-text">40:00</span>
+                </div>
+                <div>
+                    <span id="q-level" class="badge-level level-easy">سهل</span>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div id="q-text" class="question-title">جاري تحميل السؤال...</div>
+                <div id="q-container">
+                    <!-- Dynamic rendering of Options or Input -->
+                </div>
+            </div>
+
+            <button id="btn-next" class="btn" onclick="submitAnswer()">
+                تأكيد الإجابة والتالي <i class="fa-solid fa-arrow-left"></i>
+            </button>
+        </div>
+
+        <!-- SCREEN 4: RESULT -->
+        <div id="screen-result" class="screen">
+            <h3 style="text-align: center; color: #475569; margin-bottom: 10px;">نتيجة الطالب: <span id="res-student-name" style="color: var(--primary);"></span></h3>
+            
+            <div class="score-circle-wrapper">
+                <div class="score-circle" id="score-circle-bg">
+                    <div class="score-content">
+                        <div id="res-score-num" class="score-number">0/20</div>
+                        <div id="res-score-percent" class="score-percent">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="res-motivation" class="motivation-msg"></div>
+
+            <div class="report-section">
+                <div class="report-title">التقرير التفصيلي للإجابات النموذجية:</div>
+                <div id="report-container"></div>
+            </div>
+
+            <button class="btn" onclick="location.reload()" style="margin-top: 25px;">
+                إعادة الاختبار <i class="fa-solid fa-rotate-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <footer>
+        تطوير المنصة التعليمية التفاعلية &copy; 2026 - Mr. Sayed Abdelrahman
+    </footer>
+
+    <script>
+        /* ==================== QUESTION BANK DATA (20 Questions - Proportions) ==================== */
+        const questions = [
+            // --- 8 MCQ QUESTIONS ---
+            {
+                type: 'mcq',
+                level: 'easy',
+                q: 'إذا كان التناسب $\\frac{3}{4} = \\frac{x}{20}$، فإن قيمة $x$ تساوي:',
+                options: ['$12$', '$15$', '$16$', '$18$'],
+                ans: 1,
+                exp: 'باستخدام حاصل ضرب الطرفين يساوي حاصل ضرب الوسطين: $x = \\frac{3 \\times 20}{4} = 15$'
+            },
+            {
+                type: 'mcq',
+                level: 'easy',
+                q: 'إذا كانت الأعداد $2, 5, 6, x$ متناسبة، فإن قيمة $x$ تساوي:',
+                options: ['$12$', '$15$', '$18$', '$20$'],
+                ans: 1,
+                exp: 'تتناسب الأعداد بالترتيب: $\\frac{2}{5} = \\frac{6}{x} \\implies x = \\frac{5 \\times 6}{2} = 15$'
+            },
+            {
+                type: 'mcq',
+                level: 'easy',
+                q: 'أي من التمثيلات البيانية التالية يعبر عن علاقة تناسب طردي؟',
+                options: ['مستقيم يمر بنقطة الأصل $(0,0)$', 'منحنى مقعر للأعلى', 'خط مستقيم لا يمر بنقطة الأصل', 'خط مستقيم أفقياً يتناقص'],
+                ans: 0,
+                exp: 'علاقة التناسب الطردي بين متغيرين يمثلها بيانياً خط مستقيم يمر بنقطة الأصل $(0,0)$'
+            },
+            {
+                type: 'mcq',
+                level: 'medium',
+                q: 'إذا كان $a : 16 = 5 : 4$، فإن قيمة $a$ هي:',
+                options: ['$10$', '$12$', '$15$', '$20$'],
+                ans: 3,
+                exp: 'نكتب النسبة على صورة كسر: $\\frac{a}{16} = \\frac{5}{4} \\implies a = \\frac{16 \\times 5}{4} = 20$'
+            },
+            {
+                type: 'mcq',
+                level: 'medium',
+                q: 'إذا كانت التكلفة لـ $\\frac{3}{4}$ لتر من الحليب هي $24$ جنيهاً، فكم تكون تكلفة $1 \\frac{3}{4}$ لتر بنفس المعدل؟',
+                options: ['$48$', '$56$', '$64$', '$70$'],
+                ans: 1,
+                exp: 'سعر اللتر الواحد $= 24 \\div \\frac{3}{4} = 32$ جنيه. تكلفة $1.75$ لتر $= 1.75 \\times 32 = 56$ جنيه'
+            },
+            {
+                type: 'mcq',
+                level: 'medium',
+                q: 'إذا كان مجدي يركض مسافة $75$ متراً في $25$ ثانية، فأي تناسب يحدد الوقت ($x$) اللازم ليركض $300$ متر بنفس السرعة؟',
+                options: ['$\\frac{75}{25} = \\frac{x}{300}$', '$\\frac{75}{25} = \\frac{300}{x}$', '$\\frac{25}{x} = \\frac{300}{75}$', '$\\frac{75}{x} = \\frac{300}{25}$'],
+                ans: 1,
+                exp: 'النسبة الصحيحة للتناسب هي تثبيت المسافة في البسط والزمن في المقام: $\\frac{75}{25} = \\frac{300}{x}$'
+            },
+            {
+                type: 'mcq',
+                level: 'hard',
+                q: 'تستهلك سيارة $5$ لترات بنزين لقطع مسافة $40$ كم. ما عدد اللترات اللازمة لقطع $128$ كم بنفس المعدل؟',
+                options: ['$12$', '$14$', '$16$', '$18$'],
+                ans: 2,
+                exp: 'التناسب: $\\frac{5}{40} = \\frac{x}{128} \\implies x = \\frac{5 \\times 128}{40} = 16$ لتر'
+            },
+            {
+                type: 'mcq',
+                level: 'hard',
+                q: 'إذا كان $\\frac{8}{y} = \\frac{y}{2}$ حيث $y$ عدد صحيح موجب، فإن قيمة $y$ تساوي:',
+                options: ['$2$', '$4$', '$8$', '$16$'],
+                ans: 1,
+                exp: 'ضرب الطرفين والوسطين: $y^2 = 8 \\times 2 = 16 \\implies y = \\sqrt{16} = 4$'
+            },
+
+            // --- 8 COMPLETION QUESTIONS (NUMERIC ANSWERS ONLY) ---
+            {
+                type: 'completion',
+                level: 'easy',
+                q: 'في التناسب $\\frac{15}{x} = \\frac{30}{12}$، فإن قيمة $x = $',
+                ans: '6',
+                exp: '$x = \\frac{15 \\times 12}{30} = 6$'
+            },
+            {
+                type: 'completion',
+                level: 'easy',
+                q: 'إذا كان $7 : 8 = 21 : m$، فإن قيمة $m = $',
+                ans: '24',
+                exp: '$\\frac{7}{8} = \\frac{21}{m} \\implies m = \\frac{8 \\times 21}{7} = 24$'
+            },
+            {
+                type: 'completion',
+                level: 'medium',
+                q: 'إذا كان $\\frac{1}{3} = \\frac{2}{b + 1}$، فإن قيمة $b = $',
+                ans: '5',
+                exp: 'ضرب الطرفين والوسطين: $b + 1 = 3 \\times 2 = 6 \\implies b = 6 - 1 = 5$'
+            },
+            {
+                type: 'completion',
+                level: 'medium',
+                q: 'إذا كان $\\frac{3}{5} = \\frac{9}{k + 1}$، فإن قيمة $k = $',
+                ans: '14',
+                exp: '$k + 1 = \\frac{5 \\times 9}{3} = 15 \\implies k = 15 - 1 = 14$'
+            },
+            {
+                type: 'completion',
+                level: 'medium',
+                q: 'في مدرسة توجد نسبة $221$ طالباً إلى $13$ معلماً. إذا ارتفع عدد الطلاب إلى $272$ طالباً، فكم معلماً يلزم للحفاظ على نفس النسبة؟',
+                ans: '16',
+                exp: 'التناسب: $\\frac{221}{13} = \\frac{272}{x} \\implies x = \\frac{13 \\times 272}{221} = 16$'
+            },
+            {
+                type: 'completion',
+                level: 'hard',
+                q: 'إذا اشترى عمر $8$ تفاحات بمبلغ $60$ جنيهاً، فإن عدد التفاحات التي يمكن شراؤها بمبلغ $105$ جنيهات يساوي:',
+                ans: '14',
+                exp: 'التناسب: $\\frac{8}{60} = \\frac{x}{105} \\implies x = \\frac{8 \\times 105}{60} = 14$'
+            },
+            {
+                type: 'completion',
+                level: 'hard',
+                q: 'إذا كان $\\frac{l - 3}{12} = \\frac{5}{4}$، فإن قيمة $l = $',
+                ans: '18',
+                exp: '$l - 3 = \\frac{12 \\times 5}{4} = 15 \\implies l = 15 + 3 = 18$'
+            },
+            {
+                type: 'completion',
+                level: 'hard',
+                q: 'في التناسب $\\frac{16}{3x} = \\frac{8}{12}$، قيمة $x = $',
+                ans: '8',
+                exp: '$3x = \\frac{16 \\times 12}{8} = 24 \\implies x = \\frac{24}{3} = 8$'
+            },
+
+            // --- 4 TRUE/FALSE QUESTIONS ---
+            {
+                type: 'tf',
+                level: 'easy',
+                q: 'التناسب هو تساوي نسبتين أو أكثر.',
+                options: ['صواب', 'خطأ'],
+                ans: 0,
+                exp: 'صواب، هذا هو التعريف الرياضي الأساسي للتناسب'
+            },
+            {
+                type: 'tf',
+                level: 'medium',
+                q: 'إذا كان $\\frac{a}{b} = \\frac{c}{d}$، فإن حاصل ضرب الطرفين $a \\times d$ يساوي حاصل ضرب الوسطين $b \\times c$.',
+                options: ['صواب', 'خطأ'],
+                ans: 0,
+                exp: 'صواب، هذه هي الخاصية الأساسية التناسبية المقاطعة (الضرب التبادلي)'
+            },
+            {
+                type: 'tf',
+                level: 'medium',
+                q: 'إذا قطع قطار مسافة $100$ كم في ساعة، فإن مسافة التناسب مع الزمن لقطع $250$ كم تتطلب $3$ ساعات.',
+                options: ['صواب', 'خطأ'],
+                ans: 1,
+                exp: 'خطأ، الزمن المطلوب هو $250 \\div 100 = 2.5$ ساعة (ساعتان ونصف) وليس 3 ساعات'
+            },
+            {
+                type: 'tf',
+                level: 'hard',
+                q: 'إذا كان $x$ يتناسب طردياً مع $y$ وكان $x=6$ عندما $y=2$، فإن $x=12$ عندما $y=5$.',
+                options: ['صواب', 'خطأ'],
+                ans: 1,
+                exp: 'خطأ، لأن ثبات النسبة هو $\\frac{x}{y} = 3$، بالتالي عندما تكون $y=5$ فإن $x = 3 \\times 5 = 15$ وليس 12'
+            }
+        ];
+
+        /* ==================== STATE MANAGEMENT ==================== */
+        let studentName = "";
+        let currentQIndex = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+        let timerInterval = null;
+        let timeRemaining = 40 * 60; // 40 Minutes in seconds
+
+        /* ==================== NAVIGATION LOGIC ==================== */
+        function switchScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function goToInstructions() {
+            const nameInput = document.getElementById('student-name').value.trim();
+            if (nameInput.length < 5) {
+                alert("يرجى إدخال اسمك الثلاثي بشكل صحيح لمتابعة الاختبار.");
+                return;
+            }
+            studentName = nameInput;
+            switchScreen('screen-instructions');
+        }
+
+        function startQuiz() {
+            switchScreen('screen-quiz');
+            startTimer();
+            renderQuestion();
+        }
+
+        /* ==================== TIMER LOGIC ==================== */
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                let mins = Math.floor(timeRemaining / 60);
+                let secs = timeRemaining % 60;
+                
+                document.getElementById('timer-text').innerText = 
+                    `${mins < 10 ? '0'+mins : mins}:${secs < 10 ? '0'+secs : secs}`;
+
+                if (timeRemaining <= 300) { // Warning last 5 minutes
+                    document.getElementById('timer').classList.add('warning');
+                }
+
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    alert("انتهى الوقت المحدد للاختبار! سيتم تسليم إجاباتك تلقائياً.");
+                    finishQuiz();
+                }
+            }, 1000);
+        }
+
+        /* ==================== QUESTION RENDER ==================== */
+        function renderQuestion() {
+            const qData = questions[currentQIndex];
+            
+            // Progress & Level
+            document.getElementById('q-progress').innerText = `${currentQIndex + 1} / ${questions.length}`;
+            const levelElem = document.getElementById('q-level');
+            levelElem.innerText = qData.level == 'easy' ? 'سهل' : (qData.level == 'medium' ? 'متوسط' : 'صعب');
+            levelElem.className = `badge-level level-${qData.level}`;
+
+            // Title
+            document.getElementById('q-text').innerHTML = qData.q;
+
+            // Render Input/Options
+            const container = document.getElementById('q-container');
+            container.innerHTML = '';
+
+            if (qData.type === 'mcq' || qData.type === 'tf') {
+                const optsDiv = document.createElement('div');
+                optsDiv.className = 'options-grid';
+
+                qData.options.forEach((opt, index) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.innerHTML = `<span>${opt}</span> <i class="fa-regular fa-circle"></i>`;
+                    btn.onclick = () => selectOption(btn, index);
+                    optsDiv.appendChild(btn);
+                });
+                container.appendChild(optsDiv);
+
+            } else if (qData.type === 'completion') {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'completion-input';
+                input.placeholder = 'اكتب رقم الإجابة هنا...';
+                input.id = 'completion-ans';
+                container.appendChild(input);
+            }
+
+            // Trigger MathJax Typesetting
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function selectOption(btnElem, index) {
+            document.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('selected');
+                b.querySelector('i').className = 'fa-regular fa-circle';
+            });
+            btnElem.classList.add('selected');
+            btnElem.querySelector('i').className = 'fa-solid fa-circle-check';
+            userAnswers[currentQIndex] = index;
+        }
+
+        function submitAnswer() {
+            const qData = questions[currentQIndex];
+
+            if (qData.type === 'completion') {
+                const inputVal = document.getElementById('completion-ans').value.trim();
+                if (inputVal === "") {
+                    alert("يرجى كتابة الإجابة أولاً للتقدم.");
+                    return;
+                }
+                userAnswers[currentQIndex] = inputVal;
+            } else {
+                if (userAnswers[currentQIndex] === null) {
+                    alert("يرجى اختيار إجابة أولاً للتقدم.");
+                    return;
+                }
+            }
+
+            currentQIndex++;
+            if (currentQIndex < questions.length) {
+                renderQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        /* ==================== RESULT & REPORT LOGIC ==================== */
+        function finishQuiz() {
+            clearInterval(timerInterval);
+            switchScreen('screen-result');
+
+            let score = 0;
+            const reportContainer = document.getElementById('report-container');
+            reportContainer.innerHTML = '';
+
+            questions.forEach((q, idx) => {
+                let isCorrect = false;
+                let userAns = userAnswers[idx];
+
+                if (q.type === 'mcq' || q.type === 'tf') {
+                    if (userAns === q.ans) isCorrect = true;
+                } else if (q.type === 'completion') {
+                    if (String(userAns).trim() === String(q.ans).trim()) isCorrect = true;
+                }
+
+                if (isCorrect) score++;
+
+                // Build Card Report
+                const card = document.createElement('div');
+                card.className = `report-card ${isCorrect ? 'correct' : 'incorrect'}`;
+
+                let userAnsDisplay = userAns;
+                let correctAnsDisplay = q.ans;
+
+                if (q.type === 'mcq' || q.type === 'tf') {
+                    userAnsDisplay = userAns !== null ? q.options[userAns] : 'لم أجب';
+                    correctAnsDisplay = q.options[q.ans];
+                }
+
+                card.innerHTML = `
+                    <div class="report-q-title">س${idx + 1}: ${q.q}</div>
+                    <div class="report-ans-row">إجابتك: <span class="${isCorrect ? 'text-correct' : 'text-incorrect'}">${userAnsDisplay}</span></div>
+                    ${!isCorrect ? `<div class="report-ans-row">الإجابة الصحيحة: <span class="text-correct">${correctAnsDisplay}</span></div>` : ''}
+                    <div class="explanation-box"><i class="fa-solid fa-lightbulb"></i> <strong>الشرح:</strong> ${q.exp}</div>
+                `;
+                reportContainer.appendChild(card);
+            });
+
+            // Display Score Summary
+            document.getElementById('res-student-name').innerText = studentName;
+            document.getElementById('res-score-num').innerText = `${score}/${questions.length}`;
+            
+            const percent = Math.round((score / questions.length) * 100);
+            document.getElementById('res-score-percent').innerText = `${percent}%`;
+
+            // Score Circle CSS Gradient
+            document.getElementById('score-circle-bg').style.background = 
+                `conic-gradient(var(--primary-light) ${percent * 3.6}deg, #e2e8f0 0deg)`;
+
+            // Motivational Messages & Confetti
+            const msgElem = document.getElementById('res-motivation');
+            if (percent >= 85) {
+                msgElem.innerText = "🌟 ممتاز! أداء رائع وعبقري!";
+                msgElem.style.color = "#10b981";
+                fireConfetti();
+            } else if (percent >= 65) {
+                msgElem.innerText = "👍 أحسنت! مستوى جيد جداً ونطمح للمزيد.";
+                msgElem.style.color = "#f59e0b";
+            } else {
+                msgElem.innerText = "💪 محاولة جيدة، يرجى مراجعة الشرح والتدرب مجدداً.";
+                msgElem.style.color = "#ef4444";
+            }
+
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function fireConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
